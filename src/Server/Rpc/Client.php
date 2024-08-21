@@ -57,10 +57,29 @@ final class Client
      */
     private function encode(Message $message): string
     {
-        $body = json_encode($message);
+        $body = json_encode($this->normalize($message));
         $bodyLength = strlen($body);
 
         return "Content-Length: $bodyLength\r\n\r\n$body";
+    }
+
+    /**
+     * @param mixed $message
+     * @return mixed
+     */
+    private function normalize($message): mixed
+    {
+        if (is_object($message)) {
+            $message = (array) $message;
+        }
+
+        if (!is_array($message)) {
+            return $message;
+        }
+
+        return array_filter(array_map([$this, 'normalize'], $message), function ($value) {
+            return $value !== null;
+        });
     }
 
     /**

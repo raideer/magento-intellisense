@@ -6,6 +6,7 @@ use Amp\DeferredCancellation;
 use Amp\Future;
 use Error;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Raideer\MagentoIntellisense\Server\Api\MessageHandlerInterface;
 use Raideer\MagentoIntellisense\Server\Rpc\Message;
 use Raideer\MagentoIntellisense\Server\Rpc\NotificationMessage;
@@ -27,7 +28,8 @@ class MessageDispatcher
 
     public function __construct(
         private ResponseHandler $responseHandler,
-        private HandlerPool $handlers
+        private HandlerPool $handlers,
+        private LoggerInterface $logger
     ) {
     }
 

@@ -19,11 +19,11 @@ final class MessageFactory
 
         unset($body['jsonrpc']);
 
-        if (!isset($body['id']) && isset($body['method'])) {
+        if (!isset($body['id']) && isset($body['method']) && isset($body['params'])) {
             return new NotificationMessage($body['method'], $body['params']);
         }
 
-        if (isset($body['id']) && isset($body['method'])) {
+        if (isset($body['id']) && isset($body['method']) && isset($body['params'])) {
             return new RequestMessage($body['id'], $body['method'], $body['params']);
         }
 
