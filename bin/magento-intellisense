@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+use Monolog\ErrorHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Raideer\MagentoIntellisense\ContainerBuilder;
+use Raideer\MagentoIntellisense\Server;
+
+require_once $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
+
+$streamHandler = new StreamHandler(__DIR__ . '/../log/magento-intellisense.log');
+$logger = new Logger('mi', [$streamHandler]);
+ErrorHandler::register($logger);
+
+$builder = new ContainerBuilder();
+$container = $builder->build();
+
+$container->set(LoggerInterface::class, $logger);
+$container->get(Server::class)->run();

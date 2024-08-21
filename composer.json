@@ -1,0 +1,43 @@
+{
+    "name": "raideer/magento-intellisense",
+    "authors": [
+        {
+            "name": "raideer",
+            "email": "hi@kristofers.dev"
+        }
+    ],
+    "bin": [
+        "bin/magento-intellisense"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Raideer\\MagentoIntellisense\\": "src"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "php-di/php-di": "^7.0",
+        "amphp/amp": "^3.0",
+        "amphp/byte-stream": "^2.1",
+        "phpactor/language-server-protocol": "^3.17",
+        "symfony/config": "^7.0",
+        "symfony/yaml": "^7.0",
+        "psr/log": "^3.0",
+        "monolog/monolog": "^3.6",
+        "symfony/event-dispatcher": "^7.0",
+        "symfony/finder": "^7.0",
+        "ramsey/uuid": "^4.7",
+        "symfony/stopwatch": "^7.0",
+        "amphp/file": "^3.1",
+        "amphp/parallel": "^2.2",
+        "microsoft/tolerant-php-parser": "^0.1.2",
+        "webmozart/glob": "^4.7",
+        "phpdocumentor/reflection": "~6.0",
+        "raideer/xml-parser": "^0.0.3",
+        "composer-runtime-api": "^2.2",
+        "wyndow/fuzzywuzzy": "^0.6.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.58"
+    }
+}
