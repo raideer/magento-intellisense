@@ -8,7 +8,7 @@ use Raideer\MagentoIntellisense\Server\MessageDispatcher;
 use Raideer\MagentoIntellisense\Server\Rpc\Client;
 use Raideer\MagentoIntellisense\Server\Rpc\Message;
 use Raideer\MagentoIntellisense\Server\Rpc\MessageFactory;
-use Raideer\MagentoIntellisense\Server\Rpc\MessageReader;
+use Raideer\MagentoIntellisense\Server\Rpc\MessageParser;
 
 use function Amp\async;
 
@@ -17,7 +17,7 @@ final class Server
     public function __construct(
         private LoggerInterface $logger,
         private TransportInterface $transport,
-        private MessageReader $reader,
+        private MessageParser $parser,
         private MessageFactory $messageFactory,
         private MessageDispatcher $dispatcher,
         private Client $rpcClient
@@ -48,7 +48,7 @@ final class Server
      */
     private function processChunk(string $chunk)
     {
-        $rawMessage = $this->reader->read($chunk);
+        $rawMessage = $this->parser->parse($chunk);
 
         if ($rawMessage === null) {
             return;

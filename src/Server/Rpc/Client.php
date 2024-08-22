@@ -12,7 +12,7 @@ final class Client
 
     public function __construct(
         private TransportInterface $transport,
-        private MessageReader $reader,
+        private MessageParser $reader,
     ) {
     }
 
