@@ -57,7 +57,13 @@ final class Client
      */
     private function encode(Message $message): string
     {
-        $body = json_encode($this->normalize($message));
+        $data = $this->normalize($message);
+
+        if ($message instanceof ResponseMessage) {
+            $data = $this->ensureOnlyResultOrErrorSet($data);
+        }
+
+        $body = json_encode($data);
         $bodyLength = strlen($body);
 
         return "Content-Length: $bodyLength\r\n\r\n$body";
@@ -80,6 +86,24 @@ final class Client
         return array_filter(array_map([$this, 'normalize'], $message), function ($value) {
             return $value !== null;
         });
+    }
+
+    /**
+     * @param array $data 
+     * @return array 
+     */
+    private function ensureOnlyResultOrErrorSet(array $data): array
+    {
+        if (array_key_exists('error', $data) && array_key_exists('result', $data)) {
+            unset($data['result']);
+            return $data;
+        }
+
+        if (!array_key_exists('error', $data) && !array_key_exists('result', $data)) {
+            $data['result'] = null;
+        }
+
+        return $data;
     }
 
     /**
