@@ -19,6 +19,9 @@ final class InitializeHandler implements MessageHandlerInterface
     ) {
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function methods(): array
     {
         return [

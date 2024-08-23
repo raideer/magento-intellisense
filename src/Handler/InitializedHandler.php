@@ -18,6 +18,9 @@ class InitializedHandler implements MessageHandlerInterface
     ) {
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function methods(): array
     {
         return [

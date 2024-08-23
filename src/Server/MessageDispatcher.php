@@ -46,6 +46,11 @@ class MessageDispatcher
 
         assert(($message instanceof RequestMessage) || ($message instanceof NotificationMessage));
 
+        if ($this->isCancellationMessage($message)) {
+            $this->cancel($message->params['id']);
+            return null;
+        }
+
         $handler = $this->handlers->get($message->method);
 
         if (!$handler) {
@@ -70,6 +75,10 @@ class MessageDispatcher
         try {
             $result = $handler->$method(...$args);
         } catch (Throwable $e) {
+            if ($message instanceof NotificationMessage) {
+                return null;
+            }
+        
             return ResponseMessageBuilder::fromMessage($message)
                 ->error(ResponseError::fromException($e))
                 ->build();
@@ -97,6 +106,15 @@ class MessageDispatcher
 
         $this->cancellations[$id]->cancel();
         unset($this->cancellations[$id]);
+    }
+
+    /**
+     * @param Message $message
+     * @return bool
+     */
+    private function isCancellationMessage(Message $message): bool
+    {
+        return $message instanceof NotificationMessage && $message->method === '$/cancelRequest';
     }
 
     /**
