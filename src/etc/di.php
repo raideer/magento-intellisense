@@ -7,6 +7,8 @@ use Raideer\MagentoIntellisense\Handler\HoverHandler;
 use Raideer\MagentoIntellisense\Handler\InitializedHandler;
 use Raideer\MagentoIntellisense\Handler\InitializeHandler;
 use Raideer\MagentoIntellisense\Handler\TextDocumentHandler;
+use Raideer\MagentoIntellisense\Indexer\IndexerPool;
+use Raideer\MagentoIntellisense\Indexer\ModuleInfo\ModuleInfoIndexer;
 use Raideer\MagentoIntellisense\Server\Api\TransportInterface;
 use Raideer\MagentoIntellisense\Server\HandlerPool;
 use Raideer\MagentoIntellisense\Server\Transport\Stdio;
@@ -31,4 +33,9 @@ return [
     EventDispatcherInterface::class => function () {
         return new EventDispatcher();
     },
+    IndexerPool::class => function (Container $c) {
+        return new IndexerPool(
+            $c->get(ModuleInfoIndexer::class)
+        );
+    }
 ];
