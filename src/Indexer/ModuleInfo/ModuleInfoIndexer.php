@@ -4,6 +4,7 @@ namespace Raideer\MagentoIntellisense\Indexer\ModuleInfo;
 
 use Raideer\MagentoIntellisense\Indexer\Api\IndexerInterface;
 use Raideer\MagentoIntellisense\Indexer\ContentLoader;
+use Raideer\MagentoIntellisense\Indexer\IndexStorage;
 use Raideer\MagentoIntellisense\Indexer\ModuleFinder;
 use Raideer\MagentoIntellisense\Indexer\ModuleInfo\Data\Module;
 use Raideer\MagentoIntellisense\Indexer\ModuleInfo\ModuleInfoIndex;
@@ -21,9 +22,9 @@ final class ModuleInfoIndexer implements IndexerInterface
         private Client $workDoneClient,
         private SimpleXmlParser $parser,
         private ContentLoader $contentLoader,
-        private ModuleInfoIndex $index
-    )
-    {
+        private ModuleInfoIndex $index,
+        private IndexStorage $indexStorage
+    ) {
     }
 
     /**
@@ -46,14 +47,36 @@ final class ModuleInfoIndexer implements IndexerInterface
             $this->indexModule($module);
             $i++;
         }
-
-        return;
     }
 
     /**
-     * @param SplFileInfo $modulePath 
+     * @return string 
+     */
+    public function name(): string
+    {
+        return 'Module Info';
+    }
+
+    /**
      * @return void 
-     * @throws DirectoryNotFoundException 
+     */
+    public function save(): void
+    {
+        $this->indexStorage->save($this->index);
+    }
+
+    /**
+     * @return bool 
+     */
+    public function restore(): bool
+    {
+        return $this->indexStorage->load($this->index);
+    }
+
+    /**
+     * @param SplFileInfo $modulePath
+     * @return void
+     * @throws DirectoryNotFoundException
      */
     private function indexModule(SplFileInfo $modulePath): void
     {
@@ -70,8 +93,8 @@ final class ModuleInfoIndexer implements IndexerInterface
     }
 
     /**
-     * @param SplFileInfo $file 
-     * @return void 
+     * @param SplFileInfo $file
+     * @return void
      */
     private function indexFile(SplFileInfo $file): void
     {
@@ -112,8 +135,8 @@ final class ModuleInfoIndexer implements IndexerInterface
     }
 
     /**
-     * @param SplFileInfo $file 
-     * @return bool 
+     * @param SplFileInfo $file
+     * @return bool
      */
     private function canIndex(SplFileInfo $file): bool
     {
